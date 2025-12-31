@@ -1,0 +1,16 @@
+services:
+  yolo-api:
+    build: .
+    container_name: yolo-api
+    ports:
+      - "8000:8000"
+    environment:
+      - YOLO_MODEL=/models/best.pt
+      - YOLO_IMG_SIZE=640
+      - YOLO_CONF=0.25
+    volumes:
+      - yolo_models:/models
+    restart: unless-stopped
+
+volumes:
+  yolo_models:
