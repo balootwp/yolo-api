@@ -1,4 +1,4 @@
-FROM ghcr.io/docker-library/python:3.11-slim
+FROM docker.arvancloud.ir/python:3.11-slim
 
 ARG COOLIFY_URL
 ARG COOLIFY_FQDN
