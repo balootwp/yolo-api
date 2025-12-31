@@ -1,6 +1,5 @@
-FROM python:3.11-slim
+FROM ghcr.io/docker-library/python:3.11-slim
 
-# Coolify automatically injects these args; keep them harmless
 ARG COOLIFY_URL
 ARG COOLIFY_FQDN
 ARG COOLIFY_BUILD_SECRETS_HASH
@@ -11,7 +10,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Minimal runtime libs for opencv
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libgl1 \
       libglib2.0-0 \
