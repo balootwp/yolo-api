@@ -1,5 +1,4 @@
 import os
-import io
 from typing import Any, Dict, List
 
 import numpy as np
@@ -13,7 +12,6 @@ IMG_SIZE = int(os.getenv("YOLO_IMG_SIZE", "640"))
 CONF = float(os.getenv("YOLO_CONF", "0.25"))
 
 app = FastAPI(title=APP_TITLE)
-
 model = None
 
 def load_model():
@@ -57,7 +55,6 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Model load error: {e}")
 
-    # inference
     results = m.predict(img, imgsz=IMG_SIZE, conf=CONF, verbose=False)
     r0 = results[0]
 
@@ -66,7 +63,6 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
         boxes = r0.boxes.xyxy.cpu().numpy()
         confs = r0.boxes.conf.cpu().numpy()
         clss  = r0.boxes.cls.cpu().numpy().astype(int)
-
         names = r0.names if hasattr(r0, "names") else {}
 
         for (x1, y1, x2, y2), c, k in zip(boxes, confs, clss):
@@ -77,8 +73,4 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
                 "bbox_xyxy": [float(x1), float(y1), float(x2), float(y2)],
             })
 
-    return {
-        "ok": True,
-        "count": len(detections),
-        "detections": detections,
-    }
+    return {"ok": True, "count": len(detections), "detections": detections}
